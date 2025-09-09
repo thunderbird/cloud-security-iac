@@ -1,7 +1,17 @@
 #!/bin/env python3
 
+# import pulumi
+# import pulumi_aws as aws
+
+# # Enable AWS Security Hub
+# security_hub = aws.securityhub.Account("security-hub")
+
+# # Export the Security Hub ARN
+# pulumi.export("security_hub_arn", security_hub.id)
+
 import tb_pulumi
-import tb_pulumi.security
+import tb_pulumi.securityhub
+import tb_pulumi.guardduty
 # import tb_pulumi.network
 
 
@@ -11,21 +21,20 @@ import tb_pulumi.security
 project = tb_pulumi.ThunderbirdPulumiProject()
 
 # Pull the "resources" config mapping
-# resources = project.config.get('resources')
+resources = project.config.get("resources")
+securityhub_account = resources["tb:securityhub:SecurityHubAccount"]
+security_hub_account_opts = securityhub_account["options"]
+security_hub_account = tb_pulumi.securityhub.SecurityHubAccount(
+    f"{project.name_prefix}",
+    project,
+)
 
-# # Let's say we want to build a VPC with some private IP space. We can do this with a `MultiCidrVpc`.
-# vpc_opts = resources['tb:network:MultiCidrVpc']['vpc']
-# vpc = tb_pulumi.network.MultiCidrVpc(
-#     # project.name_prefix combines the Pulumi project and stack name to create a unique prefix
-#     f'{project.name_prefix}-vpc',
-#     # Add this module's resources to the project
-#     project,
-#     # Map the rest of the config file directly into this function call, separating code from config
-#     **vpc_opts)
+guardduty_configuration_opts = resources["tb:securityhub:GuardDutyConfiguration"]
+guardduty_configuration_features = guardduty_configuration_opts["features"]
 
-# securityhub_opts = resources.config.get('resources')
-securityhub = tb_pulumi.security.SecurityHub(
-    name='securityhub',
-    pulumi_type='tb:security:SecurityHub',
-    project=project
+guardduty_configuration = tb_pulumi.guardduty.GuardDutyAccount(
+    f"{project.name_prefix}",
+    project,
+    features=guardduty_configuration_features,
+    # opts=guardduty_configuration_opts["opts"],
 )
