@@ -43,9 +43,22 @@ guardduty_configuration = tb_pulumi.guardduty.GuardDutyAccount(
 )
 
 # AWS Config Configuration
-# aws_config_configuration_opts = resources["tb:securityhub:AWSConfigConfiguration"]
+aws_config_configuration = resources.get("tb:config:AwsConfigConfiguration")
+# set delivery_email if present in config, otherwise None
+if aws_config_configuration and "delivery_email" in aws_config_configuration:
+    delivery_email = aws_config_configuration["delivery_email"]
+else:
+    delivery_email = None
+
+# set aggregator_stack to bool value if present in config, otherwise False
+if aws_config_configuration and "aggregator_stack" in aws_config_configuration:
+    aggregator_stack = aws_config_configuration["aggregator_stack"]
+else:
+    aggregator_stack = False
+
 aws_config_account = tb_pulumi.cfg.AwsConfigAccount(
     f"{project.name_prefix}",
     project,
-    # opts=aws_config_configuration_opts["opts"],
+    delivery_email=delivery_email,
+    aggregator_stack=aggregator_stack,
 )
