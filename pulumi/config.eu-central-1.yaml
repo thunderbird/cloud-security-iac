@@ -37,4 +37,4 @@ resources:
       #   status: "ENABLED"
   tb:config:AwsConfigConfiguration:
     aggregator_stack: True
-    delivery_email: "aatchison@thunderbird.net"
+    delivery_email: "services-dev@thunderbird.net"
