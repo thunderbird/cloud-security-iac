@@ -61,4 +61,4 @@ jobs:
           pulumi version
           pulumi login
           pulumi stack select mzla-services/cloud-security-iac/${{ matrix.stack }}
-          pulumi up
+          pulumi up --yes
