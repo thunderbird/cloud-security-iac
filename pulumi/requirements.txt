@@ -1,1 +1,1 @@
-tb_pulumi @ git+https://github.com/thunderbird/pulumi.git@add-aws-security-hub
+tb_pulumi @ git+https://github.com/thunderbird/pulumi.git@main

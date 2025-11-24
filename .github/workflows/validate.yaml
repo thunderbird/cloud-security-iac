@@ -1,0 +1,80 @@
+---
+name: validate
+
+concurrency:
+  group: validate
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  # This job detects which parts of the repo have been changed, setting future jobs up for conditional behavior.
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      iac-changed: ${{ steps.check.outputs.iac-changed }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: check
+        with:
+          filters: |
+            pulumi:
+              - 'pulumi/**'
+
+  # When Pulumi code or configs change, run these steps
+  iac-lint:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    container:
+        image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
+    if: needs.detect-changes.outputs.iac-changed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ruff check
+        run: "ruff check"
+
+      - name: Ruff format
+        run: "ruff format --check"
+
+  iac-diff:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    container:
+        image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
+    if: needs.detect-changes.outputs.iac-changed == 'true'
+    strategy:
+      matrix:
+        stack: [us-east-1, us-east-2, us-west-1, us-west-2, eu-central-1]
+    env:
+          PULUMI_ACCESS_TOKEN: "${{ secrets.PULUMI_ACCESS_TOKEN }}"
+          AWS_REGION: "${{ matrix.stack }}"
+          AWS_DEFAULT_REGION: "${{ matrix.stack }}"
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ matrix.stack }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - uses: actions/checkout@v4
+
+      - name: Pulumi preview
+        run: |
+          cd pulumi
+          pulumi version
+          pulumi login
+          pulumi stack select mzla-services/cloud-security-iac/${{ matrix.stack }}
+          pulumi preview --diff

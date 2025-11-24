@@ -38,3 +38,14 @@ resources:
   tb:config:AwsConfigConfiguration:
     aggregator_stack: True
     delivery_email: "services-dev@thunderbird.net"
+
+  tb:ci:AwsAutomationUser:
+    ci:
+      access_keys: {}
+      enable_legacy_access_key: True
+      # additional_policies:
+        # - arn:aws:iam::768512802988:policy/send-suite-prod-frontend-cache-invalidation
+      enable_ecr_image_push: false
+      enable_fargate_deployments: false
+      enable_full_s3_access: false
+      enable_s3_bucket_upload: false
