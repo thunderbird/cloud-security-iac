@@ -68,6 +68,7 @@ jobs:
       - name: Pulumi preview
         run: |
           cd pulumi
+          pulumi version
           pulumi login
           pulumi stack select ${{ matrix.stack }}
           pulumi preview --diff
