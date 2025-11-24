@@ -55,7 +55,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Pulumi preview
+      - name: Pulumi deploy
         run: |
           cd pulumi
           pulumi version
