@@ -41,11 +41,28 @@ jobs:
     runs-on: ubuntu-latest
     container:
         image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
-    env:
-      IS_CI_AUTOMATION: "yes"
     # if: needs.detect-changes.outputs.iac-changed == 'true'
     steps:
       - uses: actions/checkout@v4
 
       - name: Ruff formatting checks
         run: "ruff format --check"
+
+  iac-diff:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    container:
+        image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
+    # if: needs.detect-changes.outputs.iac-changed == 'true'
+    strategy:
+      matrix:
+        stack: [us-east-1, us-east-2, us-west-1, us-west-2, eu-central-1]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pulumi preview
+        run: |
+          cd pulumi
+          pulumi login
+          pulumi stack select ${{ matrix.stack }}
+          pulumi preview --diff
