@@ -1,4 +1,4 @@
-name: cloud-security-
+name: cloud-security-iac
 description: IaC for security configurations in AWS
 runtime:
   name: python
