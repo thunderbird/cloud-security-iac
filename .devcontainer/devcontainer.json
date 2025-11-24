@@ -13,7 +13,7 @@
 		},
 		"ghcr.io/larsnieuwenhuizen/features/neovim:0": {},
 		"ghcr.io/devcontainers-extra/features/pulumi:1": {
-			"version": "3.207.0"
+			"version": "3.208.0"
 		},
 		"ghcr.io/devcontainers-extra/features/ruff:1": {
 			"version": "0.14.5"
@@ -21,9 +21,9 @@
 		
 	},
 	"mounts": [
-        "source=/${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
-		"source=/${localEnv:HOME}${localEnv:USERPROFILE}/src,target=/home/vscode/src,type=bind,consistency=cached",
-		"source=/${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+        // "source=/${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+		// "source=/${localEnv:HOME}${localEnv:USERPROFILE}/src,target=/home/vscode/src,type=bind,consistency=cached",
+		// "source=/${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
     ]
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
