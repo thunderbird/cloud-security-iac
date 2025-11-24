@@ -72,7 +72,7 @@ jobs:
         run: pulumi login
 
       - name: Pulumi stack select
-        run: pulumi stack select ${{ matrix.stack }}
+        run: pulumi stack select mzla-services/cloud-security-iac/${{ matrix.stack }}
 
       - name: Pulumi preview
         run: pulumi preview --diff
