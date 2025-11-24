@@ -31,7 +31,6 @@ jobs:
           filters: |
             pulumi:
               - 'pulumi/**'
-              - '**'
 
   # When Pulumi code or configs change, run these steps
   iac-lint:
@@ -39,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
         image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
-    # if: needs.detect-changes.outputs.iac-changed == 'true'
+    if: needs.detect-changes.outputs.iac-changed == 'true'
     steps:
       - uses: actions/checkout@v4
 

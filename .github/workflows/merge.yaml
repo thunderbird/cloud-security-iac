@@ -30,14 +30,13 @@ jobs:
           filters: |
             pulumi:
               - 'pulumi/**'
-              - '**'
 
   iac-deploy:
     needs: detect-changes
     runs-on: ubuntu-latest
     container:
         image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
-    # if: needs.detect-changes.outputs.iac-changed == 'true'
+    if: needs.detect-changes.outputs.iac-changed == 'true'
     strategy:
       matrix:
         stack: [us-east-1, us-east-2, us-west-1, us-west-2, eu-central-1]
