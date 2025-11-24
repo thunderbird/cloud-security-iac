@@ -41,6 +41,7 @@ jobs:
     strategy:
       matrix:
         stack: [us-east-1, us-east-2, us-west-1, us-west-2, eu-central-1]
+      max-parallel: 1 # This limits the matrix jobs to run one at a time
     env:
           PULUMI_ACCESS_TOKEN: "${{ secrets.PULUMI_ACCESS_TOKEN }}"
           AWS_REGION: "${{ matrix.stack }}"
