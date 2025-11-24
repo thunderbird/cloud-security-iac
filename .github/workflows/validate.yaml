@@ -1,0 +1,50 @@
+---
+name: validate
+
+concurrency:
+  group: validate
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+
+permissions:
+  contents: read
+
+jobs:
+  # This job detects which parts of the repo have been changed, setting future jobs up for conditional behavior.
+  detect-changes:
+    runs-on: ubuntu-latest
+    env:
+      IS_CI_AUTOMATION: "yes"
+    outputs:
+      iac-changed: ${{ steps.check.outputs.iac-changed }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: check
+        with:
+          filters: |
+            pulumi:
+              - 'pulumi/**'
+              - '**'
+
+  # When Pulumi code or configs change, run these steps
+  iac-lint:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    container:
+        image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
+    env:
+      IS_CI_AUTOMATION: "yes"
+    if: needs.detect-changes.outputs.iac-changed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ruff formatting checks
+        run: "ruff format --check"
