@@ -19,8 +19,6 @@ jobs:
   # This job detects which parts of the repo have been changed, setting future jobs up for conditional behavior.
   detect-changes:
     runs-on: ubuntu-latest
-    env:
-      IS_CI_AUTOMATION: "yes"
     outputs:
       iac-changed: ${{ steps.check.outputs.iac-changed }}
 
@@ -66,9 +64,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Pulumi preview
-        run: |
-          cd pulumi
-          pulumi version
-          pulumi login
-          pulumi stack select ${{ matrix.stack }}
-          pulumi preview --diff
+        run: cd pulumi
+      - name: Pulumi version
+        run: pulumi version
+
+      - name: Pulumi login
+        run: pulumi login
+
+      - name: Pulumi stack select
+        run: pulumi stack select ${{ matrix.stack }}
+
+      - name: Pulumi preview
+        run: pulumi preview --diff
