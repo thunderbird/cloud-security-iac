@@ -9,6 +9,9 @@ on:
   push:
     branches:
       - "main"
+  workflow_dispatch:
+    branches:
+      - "main"
 
 permissions:
   contents: read
@@ -20,7 +23,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      iac-changed: ${{ steps.check.outputs.iac-changed }}
+      iac-changed: ${{ steps.check.outputs.pulumi }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,7 +40,7 @@ jobs:
     environment: production
     container:
         image: ghcr.io/${{ github.repository }}/cached-devcontainer:latest
-    if: needs.detect-changes.outputs.iac-changed == 'true'
+    if: needs.detect-changes.outputs.iac-changed == 'true' || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
         stack: [us-east-1, us-east-2, us-west-1, us-west-2, eu-central-1]
