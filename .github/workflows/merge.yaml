@@ -23,7 +23,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      iac-changed: ${{ steps.check.outputs.iac-changed }}
+      iac-changed: ${{ steps.check.outputs.pulumi }}
     steps:
       - uses: actions/checkout@v4
 
