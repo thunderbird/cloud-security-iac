@@ -9,17 +9,6 @@ resources:
         status: "ENABLED"
       - name: "EKS_AUDIT_LOGS"
         status: "DISABLED"
-      - name: "RUNTIME_MONITORING"
-        status: "ENABLED"
-        additional_configurations:
-          - {
-              'name': 'ECS_FARGATE_AGENT_MANAGEMENT',
-              'status': 'ENABLED',
-            }
-          - {
-              'name': 'EC2_AGENT_MANAGEMENT',
-              'status': 'ENABLED',
-            }
       # - name: "EKS_RUNTIME_MONITORING"
       #   status: "DISABLED"
       #   additional_configurations:
@@ -39,13 +28,3 @@ resources:
     aggregator_stack: True
     delivery_email: "services-dev@thunderbird.net"
 
-  tb:ci:AwsAutomationUser:
-    ci:
-      access_keys: {}
-      enable_legacy_access_key: True
-      # additional_policies:
-        # - arn:aws:iam::768512802988:policy/send-suite-prod-frontend-cache-invalidation
-      enable_ecr_image_push: false
-      enable_fargate_deployments: false
-      enable_full_s3_access: false
-      enable_s3_bucket_upload: false
