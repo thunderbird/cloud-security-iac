@@ -9,17 +9,6 @@ resources:
         status: "ENABLED"
       - name: "EKS_AUDIT_LOGS"
         status: "DISABLED"
-      - name: "RUNTIME_MONITORING"
-        status: "ENABLED"
-        additional_configurations:
-          - {
-              'name': 'ECS_FARGATE_AGENT_MANAGEMENT',
-              'status': 'ENABLED',
-            }
-          - {
-              'name': 'EC2_AGENT_MANAGEMENT',
-              'status': 'ENABLED',
-            }
       # - name: "EKS_RUNTIME_MONITORING"
       #   status: "DISABLED"
       #   additional_configurations:
