@@ -74,4 +74,3 @@ sap = tb_pulumi.iam.StackAccessPolicies(
     f'{project.name_prefix}-sap',
     project=project,
 )
-
